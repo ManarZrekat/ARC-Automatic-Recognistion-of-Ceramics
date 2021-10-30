@@ -42,7 +42,8 @@ export class LoginPage implements OnInit {
   constructor(
     private router: Router,
     private ionicAuthService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public authService: AuthService
   ) { }
 
   ngOnInit() {

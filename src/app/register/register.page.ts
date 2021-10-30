@@ -1,8 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NgLocaleLocalization } from '@angular/common';
+import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+
+
+
+export interface User {
+  firstName: string;
+  secondName: string;
+  firstSurname: string;
+  secondSurname: string;
+  emailAddress: string;
+
+}
+
+
 
 @Component({
   selector: 'app-register',
@@ -65,8 +81,13 @@ export class RegisterPage implements OnInit {
   constructor(
     private router: Router,
     private ionicAuthService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    // public flashMensaje FlashMessagesService,
   ) { }
+
+ 
 
   ngOnInit() {
     this.userForm = this.fb.group({
@@ -110,6 +131,7 @@ export class RegisterPage implements OnInit {
     this.router.navigateByUrl('login');
   }
 
+ 
   matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
     
     return (group: FormGroup): {[key: string]: any} => {
@@ -124,5 +146,50 @@ export class RegisterPage implements OnInit {
       }
     }
   }
+  // register(user: User, password: string) {
 
+  //   return new Promise<any>((resolve, reject) => {
+  //     this.afAuth.createUserWithEmailAndPassword(user.emailAddress, password)
+  //       .then(async res => {
+
+  //         Object.assign(user, {
+  //           'dateOfCreationAccount': new Date(res.user.metadata.creationTime),
+  //           'lastSignInTime': new Date(res.user.metadata.lastSignInTime)
+  //         });
+
+  //         // Add user to firestore
+  //         await this.addUser(res.user.uid, user);
+
+  //         // // Send verification email
+  //         // this.sendVerificationEmail();
+
+  //         // // Logout user
+  //         // this.logout();
+
+  //         resolve(res);
+
+  //       }, err => reject(err));
+  //   });
+  // }
+  // onFormSubmit() {
+  //   const password = this.userForm.get('password').value;
+
+  //   const user: User = {
+  //     firstName: this.userForm.get('firstName').value,
+  //     secondName: this.userForm.get('secondName').value,
+  //     firstSurname: this.userForm.get('firstSurname').value,
+  //     secondSurname: this.userForm.get('secondSurname').value,
+  //     emailAddress: this.userForm.get('emailAddress').value
+  //   };
+  //   this.register(user, password)
+  //   .then(res => {
+  //   }, err => {
+  //     console.log(err);
+  //   });
+  // }
+  // async addUser(uid: string, data: User) {
+  //   await this.usersCollection.doc(uid).set(data);
+  // }
+  
 }
+

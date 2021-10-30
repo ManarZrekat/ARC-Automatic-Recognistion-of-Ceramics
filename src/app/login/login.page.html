@@ -30,6 +30,24 @@
 
     <ion-button type="submit" expand="block" [disabled]="!userForm.valid">Signin</ion-button>
     
+    <div class="displayTable">
+      <div class="displayTableCell">
+    
+        <div class="authBlock">
+          <h3>Sign In</h3>
+    
+          <!-- Calling GoogleAuth Api from AuthService -->
+          <div class="formGroup">
+            <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
+              <i class="fab fa-google-plus-g"></i>
+              Log in with Google
+            </button>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+
     <label class="ion-text-center" color="danger">{{errorMsg}}</label>
   </form>
   <p class="ion-text-center">Not registered yet? <a (click)="goToSignup()">Register</a></p>
