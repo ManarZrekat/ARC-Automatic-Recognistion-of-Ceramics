@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { Camera } from '@ionic-native/camera/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
+// import { StatusBar } from '@ionic-native/status-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from 'src/environments/environment';
@@ -11,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireModule } from '@angular/fire/compat';
 import { StoreModule } from '@ngrx/store';
+
 
 const firebaseConfig = [
   AngularFireAuthModule,
@@ -28,7 +32,7 @@ const firebaseConfig = [
     AngularFireAuthModule,
     StoreModule.forRoot({}, {})
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [SplashScreen,Camera,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

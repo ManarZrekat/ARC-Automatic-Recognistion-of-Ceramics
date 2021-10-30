@@ -23,6 +23,12 @@ const routes: Routes = [
     path: 'testpage',
     loadChildren: () => import('./testpage/testpage.module').then( m => m.TestpagePageModule)
   },
+  {
+    path: 'camera',
+    loadChildren: () => import('./camera/camera.module').then( m => m.CameraPageModule)
+  },
+  
+
 
 ];
 

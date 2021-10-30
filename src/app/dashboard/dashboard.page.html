@@ -32,12 +32,12 @@
 
     
 
-    <ion-button type="submit" color="danger" expand="block" (click)="signOut()">Signout</ion-button>
+    
   </ion-grid>
 </ion-content>
 
 <ion-content padding>
-  <ion-card>
+  <!-- <ion-card>
     <ion-card-content>
 
     <button ion-button icon-right (click)="onTakePicture()">
@@ -48,8 +48,18 @@
       [src]="domSanitizer.bypassSecurityTrustUrl(image)" />
 
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
   <!-- <display-error [error]="error$"></display-error> -->
 </ion-content>  
+
+<div class="padding">  
+  <ion-button shape="round" color="danger" (click)="takeSnap()">  
+        Click Image
+      </ion-button>  
+      <img [src]="capturedSnapURL" />  
+    </div> 
+
+
+<ion-button type="submit" color="danger" expand="block" (click)="signOut()">Signout</ion-button>
 
