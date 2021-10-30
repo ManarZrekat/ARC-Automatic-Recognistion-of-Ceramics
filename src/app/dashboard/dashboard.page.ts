@@ -3,20 +3,25 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { CameraPage } from '../camera/camera.page';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
+  public potteryList: any[];
+  public potteryListBackup: any[];
   userDetail: string;
 
   constructor(
     private camera: Camera,
     private router: Router,
-    private ionicAuthService: AuthService
+    private ionicAuthService: AuthService,
+    private firestore: AngularFirestore
   ) { }
-  ngOnInit() {
+  async ngOnInit() {
     this.ionicAuthService.userDetails().subscribe(response => {
       if (response !== null) {
         this.userDetail = response.email;
@@ -25,6 +30,33 @@ export class DashboardPage implements OnInit {
       }
     }, error => {
       console.log(error);
+    });
+    this.potteryList = await this.initializeItems();
+  }
+  
+  ionChange(event){
+    console.log(event)
+  }
+ 
+  async initializeItems(): Promise<any> {
+    const potteryList = await this.firestore.collection('jugs')
+      .valueChanges().pipe(first()).toPromise();
+    this.potteryListBackup = potteryList;
+    return potteryList;
+  }
+  async filterList(evt) {
+    this.potteryList = await this.initializeItems();
+    const searchTerm = evt.srcElement.value;
+  
+    if (!searchTerm) {
+      return;
+    }
+  
+    this.potteryList = this.potteryList.filter(currentPottery => {
+      if (currentPottery.name && searchTerm) {
+        console.log(currentPottery);
+        return (currentPottery.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 || currentPottery.type.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      }
     });
   }
 
