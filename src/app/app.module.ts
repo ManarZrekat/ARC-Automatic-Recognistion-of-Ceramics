@@ -15,6 +15,11 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireModule } from '@angular/fire/compat';
 import { StoreModule } from '@ngrx/store';
 import { AuthService } from "./auth.service";
+
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+
 // import '../../providers/auth-service/auth-service';
 
 

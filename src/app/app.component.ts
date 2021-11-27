@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-
+import { Platform } from '@ionic/angular';
 import { AuthService } from "./auth.service";
+import { Platforms } from '@ionic/core';
 
 @Component({
   selector: 'app-root',
