@@ -121,6 +121,7 @@ export class RegisterPage implements OnInit {
       .then((response) => {
         this.errorMsg = '';
         this.successMsg = 'New user created.';
+        this.router.navigate(['dashboard']);
       }, error => {
         this.errorMsg = error.message;
         this.successMsg = '';

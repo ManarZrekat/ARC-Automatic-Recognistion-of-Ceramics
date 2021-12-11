@@ -13,7 +13,10 @@
           <a class="active" href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
-          <ion-searchbar showcancelbutton="" debounce="500" (ionChange)="ionChange($event)"></ion-searchbar>
+          <!--<ion-searchbar placeholder="Search Here" debounce="500" (ionInput)="search($event)" [(ngModel)]="searchKey"></ion-searchbar>
+          -->
+            <ion-searchbar [formControl]="searchField" debounce="400" >
+          </ion-searchbar>
           <!-- <a>
             <div class="camera">
               <div class="photo-button">
@@ -32,17 +35,19 @@
 
   
 
-    <ion-list lines="none">
-      <ion-item *ngFor="let potteryItem of potteryList">
+    <ion-list lines="none" >
+      <ion-item *ngFor="let potteryItem of potteryListBackup">
         <ion-label class="ion-text-wrap">
-          <ion-text color="primary">
+          <ion-text color="primary"> 
             <h3>{{ potteryItem.Type }}</h3>
           </ion-text>
-          <p>{{ potteryItem.photo }} -- {{ potteryItem.period }}</p>
+           <div class ="img"><img src="{{potteryItem.url}}" ></div>
+          
+         
+          <p>{{ potteryItem.period }}</p>
         </ion-label>
       </ion-item>
     </ion-list>
-
 
     
   </ion-grid>

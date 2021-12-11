@@ -8,6 +8,7 @@ import "firebase/firestore";
 import 'firebase/auth';  
 import { AngularFirestore } from '@angular/fire/compat/firestore/'; 
 import { Router } from "@angular/router";
+import { CookieService } from "ngx-cookie-service";
 import { FormGroup} from '@angular/forms';
 
 
@@ -37,19 +38,39 @@ export class AuthService {
     public router: Router,  
     public ngZone: NgZone, // NgZone service to remove outside scope warning
     private firestore: AngularFirestore,
+    private _cookieService: CookieService,
     ) {
       this.angularFireAuth.authState.subscribe(user => {
         if (user) {
           this.userData = user; // Setting up user data in userData var
           localStorage.setItem('user', JSON.stringify(this.userData));
           JSON.parse(localStorage.getItem('user'));
+          //this.router.navigate(['dashboard']);
         } else {
           localStorage.setItem('user', null);
           JSON.parse(localStorage.getItem('user'));
+          //this.router.navigate(['login']);
         }
       })
     }
 
+    // getAuth()
+    // .createUser({
+    //   email: 'user@example.com',
+    //   emailVerified: false,
+    //   phoneNumber: '+11234567890',
+    //   password: 'secretPassword',
+    //   displayName: 'John Doe',
+    //   photoURL: 'http://www.example.com/12345678/photo.png',
+    //   disabled: false,
+    // })
+    // .then((userRecord) => {
+    //   // See the UserRecord reference doc for the contents of userRecord.
+    //   console.log('Successfully created new user:', userRecord.uid);
+    // })
+    // .catch((error) => {
+    //   console.log('Error creating new user:', error);
+    // });
   createUser(value) {
     const password = value.password;
     const user: User = {
@@ -78,7 +99,7 @@ export class AuthService {
           
     }
   
-    
+
   async addUser(uid: string, data: User) {
     // await this.users.doc(uid).set(data);
  
@@ -93,13 +114,12 @@ export class AuthService {
         this.userdetails =  data.map(async e => {
          if ( e.payload.doc.data()["emailAddress"]== value.email){
            console.log("AAA", e.payload.doc.data()["firstName"]);
-           localStorage.setItem("user_email", e.payload.doc.data()['emailAddress']);
-           localStorage.setItem("user_name", e.payload.doc.data()['firstName']);
+           this._cookieService.set("user_email", e.payload.doc.data()['emailAddress']);
+           this._cookieService.set("user_name", e.payload.doc.data()['firstName']);
            return {id: e.payload.doc.id, firstName: e.payload.doc.data()["firstName"], lastName: e.payload.doc.data()["lastName"], emailAddress: e.payload.doc.data()["emailAddress"]};
          }
         })
      })
-
       this.angularFireAuth
         .signInWithEmailAndPassword(value.email, value.password)
         .then(
@@ -143,12 +163,43 @@ export class AuthService {
           });
       }
     });
+    // return new Promise<void>((resolve, reject) => {
+    //   if (this.angularFireAuth.currentUser) {
+    //     this._cookieService.delete('user_email','/');
+    //     this._cookieService.delete('user_name','/');
+    //     this._cookieService.deleteAll('/','xyz.net');
+    //     console.log("KKKKKKKKKK");
+        
+    //     this.angularFireAuth
+    //       .signOut()
+    //       .then(() => {
+    //         console.log('Sign out');
+    //         resolve();
+    //       })
+    //       .catch(() => {
+    //         reject();
+    //       });
+    //   }
+    // });
   }
 
   userDetails() {
     return this.angularFireAuth.user;
   }
 
-
+  // async userinit(email) {
+  //   this.firestore.collection(`users`).snapshotChanges().subscribe((data) => {
+  //      this.userdetails =  data.map(async e => {
+  //       if ( e.payload.doc.data()["emailAddress"]== email){
+  //         console.log("AAA", e.payload.doc.data()["firstName"]);
+  //         this._cookieService.set("user_email", e.payload.doc.data()['emailAddress']);
+  //         this._cookieService.set("user_name", e.payload.doc.data()['firstName']);
+  //         return {id: e.payload.doc.id, firstName: e.payload.doc.data()["firstName"], lastName: e.payload.doc.data()["lastName"], emailAddress: e.payload.doc.data()["emailAddress"]};
+  //       }
+  //      })
+  //   })
+  //   const data= await this.userdetails;    
+  //     return data;
+  // };
 }
 
