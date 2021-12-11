@@ -71,7 +71,7 @@
 
   <!-- <display-error [error]="error$"></display-error> -->
 </ion-content>  
-<ion-grid>
+<!-- <ion-grid>
   <ion-row class="ion-align-self-center">
     <ion-col size="6">
       <ion-button (click)="takePhoto(1)">Show Camera</ion-button>
@@ -84,14 +84,38 @@
 <div *ngIf="base64Image">
   <img [src]="base64Image">
   <ion-button (click)="upload()">Upload to Firebase!</ion-button>
-</div>
+</div> -->
 
-<div class="padding">  
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let photo of photoService.photos; index as position">
+        <ion-img [src]="photo.webviewPath"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- ion-fab markup  -->
+</ion-content>
+
+
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="addPhotoToGallery()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<!-- <div class="padding">  
   <ion-button shape="round" color="danger" (click)="takeSnap()">  
         Click Image
       </ion-button>  
       <img [src]="capturedSnapURL" />  
-    </div> 
+    </div>  -->
+
+
 
 
 <ion-button type="submit" color="danger" expand="block" (click)="signOut()">Signout</ion-button>

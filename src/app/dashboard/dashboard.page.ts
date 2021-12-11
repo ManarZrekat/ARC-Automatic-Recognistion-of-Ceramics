@@ -35,7 +35,6 @@ export class DashboardPage implements OnInit, OnDestroy {
   downloadURL: Observable<string>;
 
   imageTaken: string;
-
   searchList: pottery[];
   searchField: FormControl;
   searchSub: Subscription;
@@ -96,19 +95,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     //     this.getSearchResults(res);
     //   });
 
-    this.ionicAuthService.userDetails().subscribe(
-      (response) => {
-        if (response !== null) {
-          this.userDetail = response.email;
-        } else {
-          this.router.navigateByUrl("");
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
     this.potteryList = await this.initializeItems();
+
+    await this.photoService.loadSaved();
   }
 
   // async getSearchResults(term: string) {
@@ -238,55 +227,60 @@ export class DashboardPage implements OnInit, OnDestroy {
       }
     );
   }
-  async uploadImage() {
-    try {
-      const image = await this.photoService.getFromGallery();
-      console.log(image);
-      if (image) {
-        const converted = await this.photoService.readAsBase64(image);
-        this.imageTaken = converted;
-      }
-    } catch (error) {
-      // check the error content.
-      console.log("user cancelled the operation.");
-      this.presentToast("user cancelled the operation");
-    }
-    return;
-  }
-  async takePhoto() {
-    if (this.platform.is("cordova")) {
-      const options: CameraOptions = {
-        quality: 100,
-        destinationType: this.camera.DestinationType.DATA_URL,
-        encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE
-      };
+  // async uploadImage() {
+  //   try {
+  //     const image = await this.photoService.getFromGallery();
+  //     console.log(image);
+  //     if (image) {
+  //       const converted = await this.photoService.readAsBase64(image);
+  //       this.imageTaken = converted;
+  //     }
+  //   } catch (error) {
+  //     // check the error content.
+  //     console.log("user cancelled the operation.");
+  //     this.presentToast("user cancelled the operation");
+  //   }
+  //   return;
+  // }
+  // async takePhoto() {
+  //   if (this.platform.is("cordova")) {
+  //     const options: CameraOptions = {
+  //       quality: 100,
+  //       destinationType: this.camera.DestinationType.DATA_URL,
+  //       encodingType: this.camera.EncodingType.JPEG,
+  //       mediaType: this.camera.MediaType.PICTURE
+  //     };
 
-      this.camera.getPicture(options).then(
-        (imageData) => {
-          // imageData is either a base64 encoded string or a file URI
-          this.base64Image = "data:image/jpeg;base64," + imageData;
-        },
-        (err) => {
-          // Handle error
-          console.error(err);
-        }
-      );
-    }else{
-      try {
-        const image = await this.photoService.addNewToGallery();
-        console.log(image);
-        if (image) {
-          const converted = await this.photoService.readAsBase64(image);
-          this.imageTaken = converted;
-        }
-      } catch (error) {
-        // check the error content.
-        console.log("user cancelled the operation.");
-        this.presentToast("user cancelled the operation", "warning");
-      }
-    }
+  //     this.camera.getPicture(options).then(
+  //       (imageData) => {
+  //         // imageData is either a base64 encoded string or a file URI
+  //         this.base64Image = "data:image/jpeg;base64," + imageData;
+  //       },
+  //       (err) => {
+  //         // Handle error
+  //         console.error(err);
+  //       }
+  //     );
+  //   }else{
+  //     try {
+  //       const image = await this.photoService.addNewToGallery();
+  //       console.log(image);
+  //       if (image) {
+  //         const converted = await this.photoService.readAsBase64(image);
+  //         this.imageTaken = converted;
+  //       }
+  //     } catch (error) {
+  //       // check the error content.
+  //       console.log("user cancelled the operation.");
+  //       this.presentToast("user cancelled the operation", "warning");
+  //     }
+  //   }
+  // }
+
+  addPhotoToGallery() {
+    this.photoService.addNewToGallery();
   }
+
 
   upload(): void {
     var currentDate = Date.now();
