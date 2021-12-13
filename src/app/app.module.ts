@@ -10,7 +10,7 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { environment } from "src/environments/environment";
-
+import { HttpClientModule } from '@angular/common/http';
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFireModule } from "@angular/fire/compat";
 import { StoreModule } from "@ngrx/store";
@@ -48,6 +48,7 @@ const firebaseConfig = [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     StoreModule.forRoot({}, {}),

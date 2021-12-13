@@ -7,15 +7,17 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from "@angular/fire/compat/firestore";
+// import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { first, startWith } from "rxjs/operators";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { AlertController, Platform } from "@ionic/angular";
 import { map, finalize } from "rxjs/operators";
 import { Observable, Subscription } from "rxjs";
-import { PhotoService } from "../services/photo.service";
+import { UserPhoto,PhotoService } from '../services/photo.service';
 import { ToastController } from "@ionic/angular";
 import { FormControl } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
+import { ActionSheetController } from '@ionic/angular';
 
 
 interface pottery {
@@ -50,27 +52,28 @@ export class DashboardPage implements OnInit, OnDestroy {
     private storage: AngularFireStorage,
     private platform: Platform,
     private photoService: PhotoService,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    public actionSheetController: ActionSheetController
   ) {
-    this.searchField = new FormControl("");
-    this.androidPermissions
-      .checkPermission(this.androidPermissions.PERMISSION.CAMERA)
-      .then(
-        (result) => console.log("Has permission?", result.hasPermission),
-        (err) =>
-          this.androidPermissions.requestPermission(
-            this.androidPermissions.PERMISSION.CAMERA
-          )
-      );
+    // this.searchField = new FormControl("");
+    // this.androidPermissions
+    //   .checkPermission(this.androidPermissions.PERMISSION.CAMERA)
+    //   .then(
+    //     (result) => console.log("Has permission?", result.hasPermission),
+    //     (err) =>
+    //       this.androidPermissions.requestPermission(
+    //         this.androidPermissions.PERMISSION.CAMERA
+    //       )
+    //   );
 
-    this.androidPermissions
-      .requestPermissions([
-        this.androidPermissions.PERMISSION.CAMERA
-      ])
-      .then((res) => console.log("permission res", res))
-      .catch((err) =>
-        console.log("error requesting permission for camera", err)
-      );
+    // this.androidPermissions
+    //   .requestPermissions([
+    //     this.androidPermissions.PERMISSION.CAMERA
+    //   ])
+    //   .then((res) => console.log("permission res", res))
+    //   .catch((err) =>
+    //     console.log("error requesting permission for camera", err)
+    //   );
   }
 
   ngOnDestroy(): void {
@@ -227,55 +230,55 @@ export class DashboardPage implements OnInit, OnDestroy {
       }
     );
   }
-  // async uploadImage() {
-  //   try {
-  //     const image = await this.photoService.getFromGallery();
-  //     console.log(image);
-  //     if (image) {
-  //       const converted = await this.photoService.readAsBase64(image);
-  //       this.imageTaken = converted;
-  //     }
-  //   } catch (error) {
-  //     // check the error content.
-  //     console.log("user cancelled the operation.");
-  //     this.presentToast("user cancelled the operation");
-  //   }
-  //   return;
-  // }
-  // async takePhoto() {
-  //   if (this.platform.is("cordova")) {
-  //     const options: CameraOptions = {
-  //       quality: 100,
-  //       destinationType: this.camera.DestinationType.DATA_URL,
-  //       encodingType: this.camera.EncodingType.JPEG,
-  //       mediaType: this.camera.MediaType.PICTURE
-  //     };
+  async uploadImage() {
+    try {
+      const image = await this.photoService.getFromGallery();
+      console.log(image);
+      if (image) {
+        const converted = await this.photoService.readAsBase64(image);
+        this.imageTaken = converted;
+      }
+    } catch (error) {
+      // check the error content.
+      console.log("user cancelled the operation.");
+      this.presentToast("user cancelled the operation");
+    }
+    return;
+  }
+  async takePhoto() {
+    if (this.platform.is("cordova")) {
+      const options: CameraOptions = {
+        quality: 100,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      };
 
-  //     this.camera.getPicture(options).then(
-  //       (imageData) => {
-  //         // imageData is either a base64 encoded string or a file URI
-  //         this.base64Image = "data:image/jpeg;base64," + imageData;
-  //       },
-  //       (err) => {
-  //         // Handle error
-  //         console.error(err);
-  //       }
-  //     );
-  //   }else{
-  //     try {
-  //       const image = await this.photoService.addNewToGallery();
-  //       console.log(image);
-  //       if (image) {
-  //         const converted = await this.photoService.readAsBase64(image);
-  //         this.imageTaken = converted;
-  //       }
-  //     } catch (error) {
-  //       // check the error content.
-  //       console.log("user cancelled the operation.");
-  //       this.presentToast("user cancelled the operation", "warning");
-  //     }
-  //   }
-  // }
+      this.camera.getPicture(options).then(
+        (imageData) => {
+          // imageData is either a base64 encoded string or a file URI
+          this.base64Image = "data:image/jpeg;base64," + imageData;
+        },
+        (err) => {
+          // Handle error
+          console.error(err);
+        }
+      );
+    }else{
+      try {
+        const image = await this.photoService.addNewToGallery();
+        console.log(image);
+        if (image) {
+          const converted = await this.photoService.readAsBase64(image);
+          this.imageTaken = converted;
+        }
+      } catch (error) {
+        // check the error content.
+        console.log("user cancelled the operation.");
+        this.presentToast("user cancelled the operation", "warning");
+      }
+    }
+  }
 
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
@@ -307,6 +310,28 @@ export class DashboardPage implements OnInit, OnDestroy {
           console.log(url);
         }
       });
+  }
+
+  public async showActionSheet(photo: UserPhoto, position: number) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Photos',
+      buttons: [{
+        text: 'Delete',
+        role: 'destructive',
+        icon: 'trash',
+        handler: () => {
+          this.photoService.deletePicture(photo, position);
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          // Nothing to do, action sheet is automatically closed
+          }
+      }]
+    });
+    await actionSheet.present();
   }
 
   async showSuccesfulUploadAlert() {

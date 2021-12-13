@@ -5,10 +5,8 @@ import { Storage } from '@capacitor/storage';
 import { Platform } from '@ionic/angular';
 import { Capacitor } from '@capacitor/core';
 
-export interface UserPhoto {
-  filepath: string;
-  webviewPath: string;
-}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,6 @@ export class PhotoService {
     private PHOTO_STORAGE: string = 'photos';
     private platform: Platform;
   
-    // other code
   
 
   constructor(platform: Platform) { 
@@ -33,6 +30,7 @@ export class PhotoService {
       quality: 100
     });
   
+    // Save the picture and add it to photo collection
     const savedImageFile = await this.savePicture(capturedPhoto);
 
     this.photos.unshift(savedImageFile);
@@ -41,13 +39,26 @@ export class PhotoService {
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
     });
+    return capturedPhoto;
   }
+
+  public async getFromGallery() : Promise<Photo> {
+    // Take a photo
+    const existingPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Uri, // file-based data; provides best performance
+      source: CameraSource.Prompt, // automatically take a new photo with the camera
+      quality: 100, // highest quality (0 to 100)
+    });
+
+    return existingPhoto;
+  }
+
 
   public async loadSaved() {
     // Retrieve cached photo array data
     const photoList = await Storage.get({ key: this.PHOTO_STORAGE });
     this.photos = JSON.parse(photoList.value) || [];
-
+// If running on the web...
     if (!this.platform.is('hybrid')) {
     for (let photo of this.photos) {
       // Read each saved photo's data from the Filesystem
@@ -62,9 +73,10 @@ export class PhotoService {
   }
   }
 
-  private async savePicture(photo: Photo) {
+  // Save picture to file on device
+  private async savePicture(camphoto: Photo) {
     // Convert photo to base64 format, required by Filesystem API to save
-    const base64Data = await this.readAsBase64(photo);
+    const base64Data = await this.readAsBase64(camphoto);
   
     // Write the file to the data directory
     const fileName = new Date().getTime() + '.jpeg';
@@ -75,6 +87,7 @@ export class PhotoService {
     });
 
     if (this.platform.is('hybrid')) {
+      
       // Display the new image by rewriting the 'file://' path to HTTP
       // Details: https://ionicframework.com/docs/building/webview#file-protocol
       return {
@@ -87,7 +100,7 @@ export class PhotoService {
         // already loaded into memory
         return {
           filepath: fileName,
-          webviewPath: photo.webPath
+          webviewPath: camphoto.webPath
         };
       
     }
@@ -97,29 +110,53 @@ export class PhotoService {
     // already loaded into memory
     return {
       filepath: fileName,
-      webviewPath: photo.webPath
+      webviewPath: camphoto.webPath
     };
   }
 
+ 
 
-  private async readAsBase64(photo: Photo) {
+
+  public async readAsBase64(camphoto: Photo) {
+     // "hybrid" will detect Cordova or Capacitor
     if (this.platform.is('hybrid')) {
       // Read the file into base64 format
       const file = await Filesystem.readFile({
-        path: photo.path
+        path: camphoto.path
       });
   
       return file.data;
     }
     else {
       // Fetch the photo, read as a blob, then convert to base64 format
-      const response = await fetch(photo.webPath);
+      const response = await fetch(camphoto.webPath);
       const blob = await response.blob();
   
       return await this.convertBlobToBase64(blob) as string;
+      
     }
   }
   
+ 
+  public async deletePicture(photo: UserPhoto, position: number) {
+    // Remove this photo from the Photos reference data array
+    this.photos.splice(position, 1);
+  
+    // Update photos array cache by overwriting the existing photo array
+    Storage.set({
+      key: this.PHOTO_STORAGE,
+      value: JSON.stringify(this.photos)
+    });
+  
+    // delete photo file from filesystem
+    const filename = photo.filepath.substr(photo.filepath.lastIndexOf('/') + 1);
+  
+    await Filesystem.deleteFile({
+      path: filename,
+      directory: Directory.Data
+    });
+  }
+
   convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
     const reader = new FileReader;
     reader.onerror = reject;
@@ -130,7 +167,15 @@ export class PhotoService {
   });
 
 
+
   }
+
+  export interface UserPhoto {
+    filepath: string;
+    webviewPath: string;
+  }
+  
+ 
 
   
 
