@@ -22,7 +22,8 @@ export class PhotoService {
     this.platform = platform;
   }
 
-  public async addNewToGallery() {
+  public async addNewToGallery(): Promise<Photo> {
+    try{
     // Take a photo
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
@@ -32,7 +33,7 @@ export class PhotoService {
   
     // Save the picture and add it to photo collection
     const savedImageFile = await this.savePicture(capturedPhoto);
-
+  // Add new photo to Photos array
     this.photos.unshift(savedImageFile);
 
     Storage.set({
@@ -41,6 +42,11 @@ export class PhotoService {
     });
     return capturedPhoto;
   }
+  catch(e){
+    console.log('no photo');
+  }
+
+}
 
   public async getFromGallery() : Promise<Photo> {
     // Take a photo
@@ -105,13 +111,6 @@ export class PhotoService {
       
     }
 
-  
-    // Use webPath to display the new image instead of base64 since it's
-    // already loaded into memory
-    return {
-      filepath: fileName,
-      webviewPath: camphoto.webPath
-    };
   }
 
  

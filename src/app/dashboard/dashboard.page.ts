@@ -55,25 +55,28 @@ export class DashboardPage implements OnInit, OnDestroy {
     private androidPermissions: AndroidPermissions,
     public actionSheetController: ActionSheetController
   ) {
-    // this.searchField = new FormControl("");
-    // this.androidPermissions
-    //   .checkPermission(this.androidPermissions.PERMISSION.CAMERA)
-    //   .then(
-    //     (result) => console.log("Has permission?", result.hasPermission),
-    //     (err) =>
-    //       this.androidPermissions.requestPermission(
-    //         this.androidPermissions.PERMISSION.CAMERA
-    //       )
-    //   );
-
-    // this.androidPermissions
-    //   .requestPermissions([
-    //     this.androidPermissions.PERMISSION.CAMERA
-    //   ])
-    //   .then((res) => console.log("permission res", res))
-    //   .catch((err) =>
-    //     console.log("error requesting permission for camera", err)
-    //   );
+    this.searchField = new FormControl("");
+    if (this.platform.is('hybrid')) {
+    this.androidPermissions
+      .checkPermission(this.androidPermissions.PERMISSION.CAMERA)
+      .then(
+        (result) => console.log("Has permission?", result.hasPermission),
+        (err) =>
+          this.androidPermissions.requestPermission(
+            this.androidPermissions.PERMISSION.CAMERA
+          )
+      );
+          }
+          // if (this.platform.is('hybrid')) {      
+    this.androidPermissions
+      .requestPermissions([
+        this.androidPermissions.PERMISSION.CAMERA
+      ])
+      .then((res) => console.log("permission res", res))
+      .catch((err) =>
+        console.log("error requesting permission for camera", err)
+      );
+    // }
   }
 
   ngOnDestroy(): void {
@@ -245,7 +248,11 @@ export class DashboardPage implements OnInit, OnDestroy {
     }
     return;
   }
+
   async takePhoto() {
+    // try{
+
+    
     if (this.platform.is("cordova")) {
       const options: CameraOptions = {
         quality: 100,
@@ -278,8 +285,12 @@ export class DashboardPage implements OnInit, OnDestroy {
         this.presentToast("user cancelled the operation", "warning");
       }
     }
-  }
+  // }
+  // catch (e) {
+  //   console.log('no photo');
+  // }
 
+  }
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
   }
