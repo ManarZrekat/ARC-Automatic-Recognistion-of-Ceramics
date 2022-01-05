@@ -1,3 +1,62 @@
 .container{
     text-align: center;
+    // background: url(src/theme/bg.jpg) ;
+
 }
+
+.logindiv{
+  
+  --background-image: url(/src/theme/bg.jpg);  
+  // background-image:  url(/src/theme/bg.jpg) ;
+
+}
+
+
+//   ion-content.background{
+//     --background: url(/src/theme/bg.jpg) 0 0/100% 100% no-repeat;
+// }
+
+  // .ion-padding{
+  //   background:  url(/src/theme/bg.jpg);
+  // }
+
+  // #login{
+  //   background:  url(/src/theme/bg.jpg) center fixed ;
+  //   -webkit-background-size: cover;
+  //   -moz-background-size: cover;
+  //   background-size: cover;
+  // }
+
+  .ion-content{
+    background:  url(/src/theme/bg.jpg) center fixed ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+  }
+
+  // .ion-content ::ng-deep ion-scroll
+  // {
+  //   background: url(src/theme/bg.jpg) ;
+  // }
+
+ 
+
+
+  // .bgimage{
+  //    background: url(src/theme/bg.jpg) ;
+  // }
+
+  
+
+// app-login {
+// background: url(./assets/images/bg4.jpg) no-repeat center center / cover;
+//   ion-header {
+//     ion-toolbar {
+//       --background: transparent;
+//     }
+//   }
+ 
+//   ion-content {
+//     --background: transparent;
+//   }
+// }

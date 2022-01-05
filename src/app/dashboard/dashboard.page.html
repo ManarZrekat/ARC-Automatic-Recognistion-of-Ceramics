@@ -6,13 +6,7 @@
 
 <ion-content class="ion-padding">
   <ion-grid>
-    <ion-row>
-      <ion-col text-center>
-
-        <div class="topnav" >
-          <a class="active" href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+  
           <!--<ion-searchbar placeholder="Search Here" debounce="500" (ionInput)="search($event)" [(ngModel)]="searchKey"></ion-searchbar>
           -->
             <ion-searchbar [formControl]="searchField" debounce="400" >
@@ -28,10 +22,9 @@
 
   
           
-        </div>
+     
 
-      </ion-col>
-    </ion-row>
+     
 
   
 
@@ -54,6 +47,7 @@
 
   
 </ion-content>
+
 
 <ion-content padding>
   <!-- <ion-card>
@@ -110,8 +104,11 @@
   </div>
 
 
+  <ion-button type="submit" (click)="sendPostRequest()">Predict</ion-button>
+
+
   
-  <ion-grid>
+  <!-- <ion-grid>
     <ion-row>
       <ion-col size="6" *ngFor="let photo of photoService.photos; index as position">
         <ion-img [src]="photo.webviewPath" (click)="showActionSheet(photo, position)"></ion-img>
@@ -119,9 +116,24 @@
     
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 
   <!-- ion-fab markup  -->
+</ion-content>
+<ion-content>
+<ion-row>
+  <ion-col text-center>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+    <div class="topnav" >
+      <a class="active" href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-col>
+</ion-row>
 </ion-content>
 
 

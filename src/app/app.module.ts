@@ -16,6 +16,8 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { StoreModule } from "@ngrx/store";
 import { AuthService } from "./auth.service";
 
+
+
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -53,6 +55,7 @@ const firebaseConfig = [
     AngularFireAuthModule,
     StoreModule.forRoot({}, {}),
   ],
+ 
   providers: [
     SplashScreen,
     Camera,
