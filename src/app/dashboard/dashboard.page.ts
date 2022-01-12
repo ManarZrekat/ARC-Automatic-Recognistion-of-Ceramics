@@ -18,6 +18,7 @@ import { ToastController } from "@ionic/angular";
 import { FormControl } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { ActionSheetController } from '@ionic/angular';
+import { Photo } from "@capacitor/camera";
 
 
 interface pottery {
@@ -41,6 +42,8 @@ export class DashboardPage implements OnInit, OnDestroy {
   searchField: FormControl;
   searchSub: Subscription;
   searchKey: string;
+  imgData : File;
+  imgdata: Photo;
 
   constructor(
     public toastController: ToastController,
@@ -106,55 +109,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     await this.photoService.loadSaved();
   }
 
-  // async getSearchResults(term: string) {
-  //   this.searchList = [];
-  //   if(!term){return;}
-  //   const potteryRef = this.firestore.collection("students").ref;
-  //   //TODO , what about contains?
-  //   //
-  //   const jugsRef = this.firestore.collection("jugs").ref;
-  //   const jugletRef = this.firestore.collection("juglets").ref;
-  //   const bowlsRef = this.firestore.collection("Bowls").ref;
-  //   const jarsRef = this.firestore.collection("jars").ref;
-
-  //   //const merge = jugsRef.concat(jugletsref);
-
-
-  //   const jugsSnapshot = await jugsRef
-  //     .where("tags", ">=", term)
-  //     .where("tags", "<=", term + "z")
-  //     .get();
-  //     const jugletsSnapshot = await jugletRef
-  //     .where("tags", ">=", term)
-  //     .where("tags", "<=", term + "z")
-  //     .get();
-  //     const jarsSnapshot = await jarsRef
-  //     .where("tags", ">=", term)
-  //     .where("tags", "<=", term + "z")
-  //     .get();
-  //     const bowlsSnapshot = await bowlsRef
-  //     .where("tags", ">=", term)
-  //     .where("tags", "<=", term + "z")
-  //     .get();
-
-  //   this.potteryList.push(jugsSnapshot);
-  //   this.potteryList.push(jugletsSnapshot);
-  //   this.potteryList.push(jarsSnapshot);
-  //   this.potteryList.push(bowlsSnapshot);
-
-  //   if (this.potteryList && this.potteryList.length>0) {
-  //     // found one or more matching results
-  //     // const docs = this.potteryList.docs;
-  //     // docs.forEach((doc) => {
-  //     //   const data: pottery = doc.data();
-  //     //   this.searchList.push(data);
-  //     // });
-
-  //   } 
-  //   else {
-  //     console.log("no results were found");
-  //   }
-  // }
+ 
 
 
   async initializeItems(): Promise<any> {
@@ -177,7 +132,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
     // console.log(potteryList);
 
-    this.potteryListBackup = potteryList;
+    //this.potteryListBackup = potteryList;
     return potteryList;
   }
   search(event) {

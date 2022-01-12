@@ -1,3 +1,7 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet>
+    <app-countdown-timer class="item-countdown" [end]="details?.expirationDate" [units]="{from: 'second', to: 'second'}">
+      
+    </app-countdown-timer>
+  </ion-router-outlet>
 </ion-app>

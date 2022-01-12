@@ -27,21 +27,21 @@
           {{ error.message }}
         </div>
     </ng-container>
-
+<br><br>
     <ion-button type="submit" expand="block" [disabled]="!userForm.valid">Signin</ion-button>
-    
+    <br>
     <div class="displayTable">
       <div class="displayTableCell">
     
         <div class="authBlock">
-          <h3>Sign In</h3>
+          
     
           <!-- Calling GoogleAuth Api from AuthService -->
           <div class="formGroup">
-            <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
-              <i class="fab fa-google-plus-g"></i>
-              Log in with Google
-            </button>
+            <ion-button color="danger" expand="block" class="btn googleBtn" (click)="authService.GoogleAuth()">
+              <ion-icon slot="start" name="logo-google"></ion-icon>
+              <span>Signin with Google</span>
+            </ion-button>
           </div>
         </div>
     

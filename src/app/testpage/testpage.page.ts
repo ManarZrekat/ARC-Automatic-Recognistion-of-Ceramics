@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-testpage',
@@ -7,9 +8,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestpagePage implements OnInit {
 
-  constructor() { }
-
+  constructor(private router: Router) { }
+  timeInSeconds = 0;
   ngOnInit() {
+    this.startCountdown(3);
+   // this.startTimer(10000);
+  
+     
   }
+  counter: { min: number, sec: number }
+
+
+
+  delay(delay: number) {
+    return new Promise(r => {
+        setTimeout(r, delay);
+    })
+}
+startCountdown(seconds) {  
+  let counter = seconds; 
+  const interval = setInterval(() => { console.log(counter); 
+    counter--; 
+    if (counter ==0 ) { 
+      this.router.navigateByUrl('login');
+    return;
+    } 
+  }, 1000);
+ }
+
 
 }
