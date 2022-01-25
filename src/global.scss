@@ -24,3 +24,14 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.logo {
+    width: 60px;
+    height: 60px;
+    margin: 20px auto 0;
+    border-radius: 10%;
+    background: url("assets/logo.png") no-repeat;
+    background-size: 100%;
+  }
+
+

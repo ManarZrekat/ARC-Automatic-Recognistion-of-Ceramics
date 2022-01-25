@@ -10,7 +10,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore/';
 import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { FormGroup} from '@angular/forms';
-
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 
 export interface User {
@@ -30,10 +31,13 @@ export class AuthService {
   currentUser: any;
   userForm: FormGroup;
   public userdetails=[];
+  public users: Observable<User>;
 
   
 
   constructor(
+    public afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
     private angularFireAuth: AngularFireAuth,
     public router: Router,  
     public ngZone: NgZone, // NgZone service to remove outside scope warning
@@ -52,25 +56,17 @@ export class AuthService {
           //this.router.navigate(['login']);
         }
       })
+      this.users = this.afAuth.authState.pipe(
+        switchMap((users) => {
+          if (users) {
+            return this.afs.doc<User>(`users/${users.uid}`).valueChanges();
+          }
+          return of(null);
+        })
+      );
     }
 
-    // getAuth()
-    // .createUser({
-    //   email: 'user@example.com',
-    //   emailVerified: false,
-    //   phoneNumber: '+11234567890',
-    //   password: 'secretPassword',
-    //   displayName: 'John Doe',
-    //   photoURL: 'http://www.example.com/12345678/photo.png',
-    //   disabled: false,
-    // })
-    // .then((userRecord) => {
-    //   // See the UserRecord reference doc for the contents of userRecord.
-    //   console.log('Successfully created new user:', userRecord.uid);
-    // })
-    // .catch((error) => {
-    //   console.log('Error creating new user:', error);
-    // });
+
   createUser(value) {
     const password = value.password;
     const user: User = {
@@ -145,6 +141,13 @@ export class AuthService {
     }).catch((error) => {
       window.alert(error)
     })
+  }
+  async resetPassword(email: string): Promise<void> {
+    try {
+      return this.afAuth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.log('Error->', error);
+    }
   }
 
   signoutUser() {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ToastController, LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -43,7 +44,9 @@ export class LoginPage implements OnInit {
     private router: Router,
     private ionicAuthService: AuthService,
     private fb: FormBuilder,
-    public authService: AuthService
+    public forgotCtrl: AlertController,
+    public authService: AuthService,
+    public toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -73,5 +76,9 @@ export class LoginPage implements OnInit {
 
   goToSignup() {
     this.router.navigateByUrl('register');
+  }
+
+  forgotPass() {
+    this.router.navigateByUrl('forgot-password');
   }
 }

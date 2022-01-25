@@ -8,6 +8,7 @@ import { Capacitor } from '@capacitor/core';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +16,8 @@ export class PhotoService {
     public photos: UserPhoto[] = [];
     private PHOTO_STORAGE: string = 'photos';
     private platform: Platform;
+    public savedFile;
+    public imgfile;
   
   
 
@@ -86,7 +89,7 @@ export class PhotoService {
   
     // Write the file to the data directory
     const fileName = new Date().getTime() + '.jpeg';
-    const savedFile = await Filesystem.writeFile({
+     this.savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
       directory: Directory.Data
@@ -97,8 +100,8 @@ export class PhotoService {
       // Display the new image by rewriting the 'file://' path to HTTP
       // Details: https://ionicframework.com/docs/building/webview#file-protocol
       return {
-        filepath: savedFile.uri,
-        webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+        filepath: this.savedFile.uri,
+        webviewPath: Capacitor.convertFileSrc(this.savedFile.uri),
       };
     }
       else {
@@ -112,6 +115,31 @@ export class PhotoService {
     }
 
   }
+  //write photo to file type
+//   public async photoToFile(camphoto: Photo) {
+//     const fileContents = new Buffer(attachmentResponse.data.data, 'base64')
+//     fs.writeFile(part.filename, fileContents, (err) => {
+//       if (err) return console.error(err)
+//       console.log('file saved to ', part.filename)
+//     })
+//     // "hybrid" will detect Cordova or Capacitor
+//    if (this.platform.is('hybrid')) {
+//      // Read the file into base64 format
+//      const file = await Filesystem.readFile({
+//        path: camphoto.path
+//      });
+ 
+//      return file.data;
+//    }
+//    else {
+//      // Fetch the photo, read as a blob, then convert to base64 format
+//      const response = await fetch(camphoto.webPath);
+//      const blob = await response.blob();
+ 
+//      return await this.convertBlobToBase64(blob) as string;
+     
+//    }
+//  }
 
  
 
@@ -130,7 +158,7 @@ export class PhotoService {
       // Fetch the photo, read as a blob, then convert to base64 format
       const response = await fetch(camphoto.webPath);
       const blob = await response.blob();
-  
+       this.imgfile = new File([blob], 'image.jpg', {type: blob.type});
       return await this.convertBlobToBase64(blob) as string;
       
     }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
+import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { CameraPage } from "../camera/camera.page";
 import {
   AngularFirestore,
@@ -11,6 +12,7 @@ import {
 import { first, startWith } from "rxjs/operators";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { AlertController, Platform } from "@ionic/angular";
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { map, finalize } from "rxjs/operators";
 import { Observable, Subscription } from "rxjs";
 import { UserPhoto,PhotoService } from '../services/photo.service';
@@ -18,13 +20,18 @@ import { ToastController } from "@ionic/angular";
 import { FormControl } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { ActionSheetController } from '@ionic/angular';
-import { Photo } from "@capacitor/camera";
 
+
+
+
+import { HttpClient} from '@angular/common/http';
+import { readFileSync } from "fs";
 
 interface pottery {
   name?: string;
 }
 @Component({
+  
   selector: "app-dashboard",
   templateUrl: "./dashboard.page.html",
   styleUrls: ["./dashboard.page.scss"],
@@ -32,6 +39,8 @@ interface pottery {
 export class DashboardPage implements OnInit, OnDestroy {
   public potteryList:  Array<any>;;
   public potteryListBackup:  Array<any>;;
+  public  imagephoto:Photo;
+  public imageFile:File;
   userDetail: string;
   base64Image: string;
   selectedFile: File = null;
@@ -46,6 +55,8 @@ export class DashboardPage implements OnInit, OnDestroy {
   imgdata: Photo;
 
   constructor(
+  
+    public httpClient: HttpClient,
     public toastController: ToastController,
     private camera: Camera,
     private router: Router,
@@ -82,6 +93,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     // }
   }
 
+  
+
   ngOnDestroy(): void {
     if (this.searchSub) {
       this.searchSub.unsubscribe();
@@ -109,7 +122,43 @@ export class DashboardPage implements OnInit, OnDestroy {
     await this.photoService.loadSaved();
   }
 
+
+  sendPostRequest() {
+
+    // let postData = this.imagephoto.webPath;
+    let postData= this.photoService.imgfile;
+    // let postData=readFileSync('./src/1.JPG');
+    console.log(postData);
+    
+          
+
+    this.httpClient.post("http://localhost:3000/api/image", postData)
+      .subscribe(data => {
+        console.log(data['_body']);
+       }, error => {
+        console.log(error);
+      });
+  }
+
+  public async returnFileImage(camphoto: Photo) {
+    // "hybrid" will detect Cordova or Capacitor
+   if (this.platform.is('hybrid')) {
+     // Read the file into base64 format
+     const file = await Filesystem.readFile({
+       path: camphoto.path
+     });
  
+     return file;
+   }
+   else {
+     // Fetch the photo, read as a blob, then convert to base64 format
+     const response = await fetch(camphoto.webPath);
+     const blob = await response.blob();
+ 
+     return await this.photoService.convertBlobToBase64(blob) as string;
+     
+   }
+ }
 
 
   async initializeItems(): Promise<any> {
@@ -128,25 +177,20 @@ export class DashboardPage implements OnInit, OnDestroy {
     const merge = jugsList.concat(jugletsList);
     const merge2 = jarsList.concat(bowlsList);
     const potteryList = merge.concat(merge2);
-    // console.log("potteryList");
 
-    // console.log(potteryList);
 
     //this.potteryListBackup = potteryList;
     return potteryList;
   }
   search(event) {
     this.searchKey = event.target.value;
-   // console.log(this.searchKey);
+
     if (this.searchKey === '') {
-      //this.potteryList = [];
     } else if (this.searchKey.length > 2) {
-      //console.log(this.searchKey);
+
 
       this.potteryListBackup = this.potteryList.filter((currentPottery) => {
         if (currentPottery.tags && this.searchKey) {
-          
-          //console.log("current"+currentPottery.Type);
           return (currentPottery.tags.includes(this.searchKey) );
          // return (currentPottery.name.toLowerCase().indexOf(this.searchKey.toLowerCase()) > -1 || currentPottery.type.toLowerCase().indexOf(this.searchKey.toLowerCase()) > -1);
           
@@ -174,23 +218,26 @@ export class DashboardPage implements OnInit, OnDestroy {
     mediaType: this.camera.MediaType.PICTURE,
   };
 
-  takeSnap() {
-    this.camera.getPicture(this.options).then(
-      (imageData) => {
-        // this.camera.DestinationType.FILE_URI gives file URI saved in local
-        // this.camera.DestinationType.DATA_URL gives base64 URI
-        let base64Image = "data:image/jpeg;base64," + imageData;
-        // this.capturedSnapURL = base64Image;
-      },
-      (err) => {
-        console.log(err);
-        // Handle error
-      }
-    );
-  }
+  // takeSnap() {
+  //   this.camera.getPicture(this.options).then(
+  //     (imageData) => {
+  //       // this.camera.DestinationType.FILE_URI gives file URI saved in local
+  //       // this.camera.DestinationType.DATA_URL gives base64 URI
+  //       let base64Image = "data:image/jpeg;base64," + imageData;
+  //       // this.capturedSnapURL = base64Image;
+  //     },
+  //     (err) => {
+  //       console.log(err);
+  //       // Handle error
+  //     }
+  //   );
+  // }
   async uploadImage() {
     try {
       const image = await this.photoService.getFromGallery();
+      this.imagephoto=image;
+      // this.imageFile=this.returnFileImage(image);
+      // console.log(this.imagephoto.webPath);
       console.log(image);
       if (image) {
         const converted = await this.photoService.readAsBase64(image);
@@ -205,9 +252,6 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   async takePhoto() {
-    // try{
-
-    
     if (this.platform.is("cordova")) {
       const options: CameraOptions = {
         quality: 100,
@@ -251,32 +295,32 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
 
-  upload(): void {
-    var currentDate = Date.now();
-    const file: any = this.base64ToImage(this.base64Image);
-    const filePath = `Images/${currentDate}`;
-    const fileRef = this.storage.ref(filePath);
+  // upload(): void {
+  //   var currentDate = Date.now();
+  //   const file: any = this.base64ToImage(this.base64Image);
+  //   const filePath = `Images/${currentDate}`;
+  //   const fileRef = this.storage.ref(filePath);
 
-    const task = this.storage.upload(`Images/${currentDate}`, file);
-    task
-      .snapshotChanges()
-      .pipe(
-        finalize(() => {
-          this.downloadURL = fileRef.getDownloadURL();
-          this.downloadURL.subscribe((downloadURL) => {
-            if (downloadURL) {
-              this.showSuccesfulUploadAlert();
-            }
-            console.log(downloadURL);
-          });
-        })
-      )
-      .subscribe((url) => {
-        if (url) {
-          console.log(url);
-        }
-      });
-  }
+  //   const task = this.storage.upload(`Images/${currentDate}`, file);
+  //   task
+  //     .snapshotChanges()
+  //     .pipe(
+  //       finalize(() => {
+  //         this.downloadURL = fileRef.getDownloadURL();
+  //         this.downloadURL.subscribe((downloadURL) => {
+  //           if (downloadURL) {
+  //             this.showSuccesfulUploadAlert();
+  //           }
+  //           console.log(downloadURL);
+  //         });
+  //       })
+  //     )
+  //     .subscribe((url) => {
+  //       if (url) {
+  //         console.log(url);
+  //       }
+  //     });
+  // }
 
   public async showActionSheet(photo: UserPhoto, position: number) {
     const actionSheet = await this.actionSheetController.create({
@@ -312,18 +356,18 @@ export class DashboardPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  base64ToImage(dataURI) {
-    const fileDate = dataURI.split(",");
-    // const mime = fileDate[0].match(/:(.*?);/)[1];
-    const byteString = atob(fileDate[1]);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([arrayBuffer], { type: "image/png" });
-    return blob;
-  }
+  // base64ToImage(dataURI) {
+  //   const fileDate = dataURI.split(",");
+  //   // const mime = fileDate[0].match(/:(.*?);/)[1];
+  //   const byteString = atob(fileDate[1]);
+  //   const arrayBuffer = new ArrayBuffer(byteString.length);
+  //   const int8Array = new Uint8Array(arrayBuffer);
+  //   for (let i = 0; i < byteString.length; i++) {
+  //     int8Array[i] = byteString.charCodeAt(i);
+  //   }
+  //   const blob = new Blob([arrayBuffer], { type: "image/png" });
+  //   return blob;
+  // }
 
   signOut() {
     this.ionicAuthService

@@ -27,7 +27,7 @@ export class TestpagePage implements OnInit {
 }
 startCountdown(seconds) {  
   let counter = seconds; 
-  const interval = setInterval(() => { console.log(counter); 
+  const interval = setInterval(() => { 
     counter--; 
     if (counter ==0 ) { 
       this.router.navigateByUrl('login');

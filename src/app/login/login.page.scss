@@ -1,3 +1,16 @@
 .container{
     text-align: center;
+  
+
+}
+
+
+ion-content.background{
+  --background: url(../../assets/bg6.jpg) 0 0/100% 100% no-repeat;
+}
+
+#input{
+  border-radius: 10px;
+  border: 2px solid #ad9180;
+  padding: 10px; 
 }
