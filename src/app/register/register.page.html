@@ -4,10 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" class="background">
+  <br>
+  <br>
   <form class="form" [formGroup]="userForm" (ngSubmit)="signUp(userForm.value)">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
+    <ion-item id = "input">
+      <ion-label  position="floating">Email</ion-label>
       <ion-input type="text" formControlName="email"></ion-input>
     </ion-item>
     
@@ -17,26 +19,29 @@
       </div>
     </ng-container>
 
-    
+ 
 
-    <ion-item>
-      <ion-label position="floating" color="primary">First Name</ion-label>
-      <ion-input type="text" formControlName="first_name" class="form-controll" required></ion-input>
+    <ion-item id = "input">
+      <ion-label  position="floating" color="primary">First Name</ion-label>
+      <ion-input  type="text" formControlName="first_name" class="form-controll" required></ion-input>
     </ion-item>
 
-    <ion-item>
+
+    <ion-item id = "input">
       <ion-label position="floating" color="primary">Last Name</ion-label>
       <ion-input type="text" formControlName="last_name" class="form-controll" required></ion-input>
     </ion-item>
 
-    <ion-item>
+  
+
+    <ion-item id = "input">
       <ion-label position="floating" color="primary">Password</ion-label>
-      <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+      <ion-input  type="password" formControlName="password" class="form-controll" required></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="floating" color="primary">Confirm Password</ion-label>
-      <ion-input type="password" formControlName="Confirm_password" class="form-controll" required></ion-input>
+    <ion-item id = "input">
+      <ion-label  position="floating" color="primary">Confirm Password</ion-label>
+      <ion-input  type="password" formControlName="Confirm_password" class="form-controll" required></ion-input>
     </ion-item>
 
     <!-- <ion-item class='form-text error' *ngIf="userForm.controls.confirm_Password.touched && userForm.hasError('mismatchedPasswords') && userForm.controls.password.valid">

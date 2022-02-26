@@ -1,3 +1,4 @@
+<ion-app>
 <ion-header>
   <ion-toolbar>
     <ion-title class="ios">ARC</ion-title>
@@ -11,34 +12,20 @@
       <ion-col text-center>
 
         <div class="topnav" >
-          <a class="active" href="#home">Home</a>
+          <!-- <a class="active" href="#home">Home</a> -->
     
-          <ion-searchbar placeholder="Search Here" debounce="500" (ionInput)="search($event)" [(ngModel)]="searchKey"></ion-searchbar>
+          <!-- <ion-searchbar placeholder="Search Here" debounce="500" (ionInput)="search($event)" [(ngModel)]="searchKey" ></ion-searchbar> -->
+          <ion-searchbar id ="searchbar" placeholder="Search Here" debounce="500" (keyup)="searchbar($event)" [(ngModel)]="searchKey" ></ion-searchbar>
 
         </div>
 
       </ion-col>
     </ion-row>
-    
-    <ion-list lines="none" class = "md" >
-      <ion-item *ngFor="let potteryItem of potteryListBackup">
-        <ion-label class="ion-text-wrap">
-          <ion-text color="primary"> 
-            
-          </ion-text>
-           <div class ="img"><img src="{{potteryItem.url}}" height="100" width="100" ></div>
-          
-           <h3>Type: {{ potteryItem.Type }}</h3>
-          <p>Period:{{ potteryItem.period }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
 
- 
   </ion-grid>
 
   
-</ion-content>
+
 
 
 <!-- 
@@ -75,7 +62,7 @@
 </div> -->
 
 
-<ion-content>
+
 
   <ion-grid *ngIf="imageTaken">
     <ion-row style="text-align: center;">
@@ -84,39 +71,54 @@
   </ion-grid>
   <ion-grid>
     <ion-row class="ion-align-self-center">
-      <ion-col size="6" style="text-align: right;">
-        <ion-button (click)="takePhoto()">Take a Picture</ion-button>
+      <ion-col size="6"  id = "camera" style="text-align: right;">
+        <!-- <ion-button (click)="takePhoto()">Take a Picture</ion-button> -->
+        <ion-fab-button id="cameraa" (click)="takePhoto()">
+          <ion-icon id ="cameraIcon" name="camera"></ion-icon>
+        </ion-fab-button>
       </ion-col>
-      <ion-col size="6">
-        <ion-button (click)="uploadImage()" color="secondary">Upload Image</ion-button>
-      </ion-col>
+      <!-- <ion-col size="6">
+        <ion-button (click)="uploadImage()" color="secondary">Upload Image</ion-button> 
+        <ion-fab-button (click)="uploadImage()">
+          <ion-icon name="camera"></ion-icon>
+        </ion-fab-button>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
-  <div *ngIf="base64Image">
+  <!-- <div *ngIf="base64Image">
     <img [src]="base64Image">
     <ion-button (click)="upload()">Upload to Firebase!</ion-button>
-  </div>
+  </div> -->
 
 
-  <ion-button type="submit" (click)="sendPostRequest()">Predict</ion-button>
-
-  <!-- ion-fab markup  -->
-</ion-content>
-<ion-content>
-<ion-row>
-  <ion-col text-center>
-    <ion-tabs>
-      <ion-tab-bar slot="bottom">
-    <div class="topnav" >
-      <a class="active" href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </div>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-col>
-</ion-row>
+  <!-- <ion-button type="submit" (click)="sendPostRequest()">Predict</ion-button> -->
 </ion-content>
 
-<ion-button type="submit" color="danger" expand="block" (click)="signOut()">Signout</ion-button>
 
+
+<!-- <ion-button type="submit" color="danger" expand="block" (click)="signOut()">Signout</ion-button> -->
+<!--<ion-content class = "tabs tabs-item-hide" id="tabs">-->
+<!-- <ion-tabs>
+  <div class="tabs-inner"></div> -->
+
+  <ion-tab-bar slot="bottom">
+  
+    <ion-tab-button type="submit" color="danger" expand="block" (click)="about()">
+      <ion-icon name="information-circle"></ion-icon>
+      <ion-label>About</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button type="submit" color="danger" expand="block" (click)="home()">
+      <ion-icon name="Home"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <ion-label>Signout</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+<!-- </ion-tabs> -->
+
+<!-- </ion-content> -->
+</ion-app>

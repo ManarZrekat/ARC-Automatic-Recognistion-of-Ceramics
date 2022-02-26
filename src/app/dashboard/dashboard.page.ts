@@ -93,6 +93,12 @@ export class DashboardPage implements OnInit, OnDestroy {
     // }
   }
 
+  searchbar(evt){
+    this.router.navigateByUrl('search');
+  }
+
+
+
   
 
   ngOnDestroy(): void {
@@ -121,24 +127,53 @@ export class DashboardPage implements OnInit, OnDestroy {
 
     await this.photoService.loadSaved();
   }
+  async sendPostRequest() {
+    let  url = 'http://localhost:3000/api/image';
+    const date = new Date().valueOf();
+  
+    // Replace extension according to your media type
+    const imageName = date+ '.png';
+    // call method that creates a blob from dataUri
+    // const = photo
+    const base64 = this.photoService.readAsBase64(await this.photoService.imgfile)
+    console.log("a", await this.photoService.imgfile);
 
+    console.log("b", await base64);
 
-  sendPostRequest() {
-
-    // let postData = this.imagephoto.webPath;
-    let postData= this.photoService.imgfile;
-    // let postData=readFileSync('./src/1.JPG');
-    console.log(postData);
+    const imageBlob = this.dataURItoBlob(base64);
     
-          
+    const imageFile = new File([imageBlob], imageName, { type: 'image/png' })
 
-    this.httpClient.post("http://localhost:3000/api/image", postData)
-      .subscribe(data => {
-        console.log(data['_body']);
-       }, error => {
-        console.log(error);
-      });
+    let  postData = new FormData();
+    postData.append('file', imageFile);
+  
+    let data:Observable<any> = this.httpClient.post(url,postData);
+    data.subscribe((result) => {
+      console.log(result);
+    });
+
   }
+
+
+  dataURItoBlob(dataURI) {
+    console.log(dataURI);
+
+    console.log("AAAAAA", JSON.stringify(dataURI).split(',')[2].replace(/=="}/, ''));
+
+    const str= JSON.stringify(dataURI).split(',')[2].replace(/=="}/, '');
+    const binary = atob(str);
+
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {
+      type: 'image/png'
+    });
+  }
+
+
+
 
   public async returnFileImage(camphoto: Photo) {
     // "hybrid" will detect Cordova or Capacitor
@@ -378,6 +413,12 @@ export class DashboardPage implements OnInit, OnDestroy {
       .catch((error) => {
         console.log(error);
       });
+  }
+  home(){
+    this.router.navigateByUrl("dashboard");
+  }
+  about(){
+    this.router.navigateByUrl("about");
   }
 
   async presentToast(message: string, color: string = "secondary") {

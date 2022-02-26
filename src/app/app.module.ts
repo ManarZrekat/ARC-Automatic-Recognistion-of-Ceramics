@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { Camera } from "@ionic-native/camera/ngx";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+//import { SplashScreen } from "@ionic-native/splash-screen";
 
 // import { StatusBar } from '@ionic-native/status-bar';
 import { AppComponent } from "./app.component";
@@ -57,7 +57,7 @@ const firebaseConfig = [
   ],
  
   providers: [
-    SplashScreen,
+   // SplashScreen,
     Camera,
     PhotoService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
