@@ -24,6 +24,9 @@ import { ActionSheetController } from '@ionic/angular';
 
 
 
+
+
+
 import { HttpClient} from '@angular/common/http';
 import { readFileSync } from "fs";
 
@@ -53,6 +56,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   searchKey: string;
   imgData : File;
   imgdata: Photo;
+  label: string;
 
   constructor(
   
@@ -67,6 +71,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     private platform: Platform,
     private photoService: PhotoService,
     private androidPermissions: AndroidPermissions,
+    private http: HttpClient,
     public actionSheetController: ActionSheetController
   ) {
     this.searchField = new FormControl("");
@@ -127,32 +132,49 @@ export class DashboardPage implements OnInit, OnDestroy {
 
     await this.photoService.loadSaved();
   }
-  async sendPostRequest() {
-    let  url = 'http://localhost:3000/api/image';
-    const date = new Date().valueOf();
+  // async sendPostRequest() {
+  //   let  url = 'http://192.168.1.20:8989/predict';
+  //   const date = new Date().valueOf();
   
-    // Replace extension according to your media type
-    const imageName = date+ '.png';
-    // call method that creates a blob from dataUri
-    // const = photo
-    const base64 = this.photoService.readAsBase64(await this.photoService.imgfile)
-    console.log("a", await this.photoService.imgfile);
+  //   // Replace extension according to your media type
+  //   const imageName = date+ '.png';
+  //   // call method that creates a blob from dataUri
+  //   // const = photo
+  //   const base64 = this.photoService.readAsBase64(await this.photoService.imgfile)
+  //   console.log("a", await this.photoService.imgfile);
 
-    console.log("b", await base64);
+  //   console.log("b", await base64);
 
-    const imageBlob = this.dataURItoBlob(base64);
+  //   const imageBlob = this.dataURItoBlob(base64);
     
-    const imageFile = new File([imageBlob], imageName, { type: 'image/png' })
+  //   const imageFile = new File([imageBlob], imageName, { type: 'image/png' })
 
-    let  postData = new FormData();
-    postData.append('file', imageFile);
+  //   let  postData = new FormData();
+  //   postData.append('file', imageFile);
   
-    let data:Observable<any> = this.httpClient.post(url,postData);
-    data.subscribe((result) => {
-      console.log(result);
-    });
+  //   let data:Observable<any> = this.httpClient.post(url,postData);
+  //   data.subscribe((result) => {
+  //     console.log(result);
+  //   });
 
-  }
+  // }
+
+
+  async sendPostRequest() {
+    let formData: FormData = new FormData();
+  formData.append('file', this.photoService.imgfile);
+  
+  this.http.post("http://localhost:8989/predict", formData, {responseType: 'text'}).subscribe(
+      data => {
+        this.label = data;
+          console.log(data); 
+      },
+      error => {
+          console.log(error);
+      }
+  );
+    }
+  
 
 
   dataURItoBlob(dataURI) {
@@ -308,10 +330,12 @@ export class DashboardPage implements OnInit, OnDestroy {
     }else{
       try {
         const image = await this.photoService.addNewToGallery();
+        
         console.log(image);
         if (image) {
           const converted = await this.photoService.readAsBase64(image);
           this.imageTaken = converted;
+          console.log("here")
         }
       } catch (error) {
         // check the error content.
@@ -404,6 +428,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   //   return blob;
   // }
 
+  //bottom tab bar functions
   signOut() {
     this.ionicAuthService
       .signoutUser()

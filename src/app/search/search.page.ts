@@ -221,7 +221,23 @@ export class SearchPage implements OnInit, OnDestroy {
 
     }
     }
-
+  //bottom tab bar functions
+  signOut() {
+    this.ionicAuthService
+      .signoutUser()
+      .then((res) => {
+        this.router.navigateByUrl("login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  home(){
+    this.router.navigateByUrl("dashboard");
+  }
+  about(){
+    this.router.navigateByUrl("about");
+  }
 
 
   async presentToast(message: string, color: string = "secondary") {

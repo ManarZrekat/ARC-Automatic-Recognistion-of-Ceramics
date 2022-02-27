@@ -53,31 +53,22 @@
   
 </ion-content>
 
-<!-- <ion-footer>
-  <ion-toolbar>
-    <ion-title>Footer</ion-title>
-  </ion-toolbar>
-</ion-footer> -->
-<!-- <ion-content id="tabs">
-  <ion-tabs>
-    <div class="tabs-inner"></div>
-    <ion-tab-bar slot="bottom">
-    
-      <ion-tab-button tab="about">
-        <ion-icon name="information-circle"></ion-icon>
-        <ion-label>About</ion-label>
-      </ion-tab-button>
+<ion-tab-bar slot="bottom">
   
-      <ion-tab-button tab="camera">
-        <ion-icon name="camera"></ion-icon>
-        <ion-label>Camera</ion-label>
-      </ion-tab-button>
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="about()">
+    <ion-icon name="information-circle"></ion-icon>
+    <ion-label>About</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="home()">
+    <ion-icon name="Home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
+    <ion-icon name="log-out-outline"></ion-icon>
+    <ion-label>Signout</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>
   
-      <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
-        <ion-icon name="log-out-outline"></ion-icon>
-        <ion-label>Signout</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
   
-  </ion-content> -->
