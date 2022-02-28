@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ResultsPageRoutingModule } from './results-routing.module';
 
 import { ResultsPage } from './results.page';
+import { DashboardPage } from '../dashboard/dashboard.page';
 
 @NgModule({
   imports: [

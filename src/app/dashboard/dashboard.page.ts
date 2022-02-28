@@ -21,8 +21,8 @@ import { FormControl } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { ActionSheetController } from '@ionic/angular';
 
-
-
+import { NavController } from '@ionic/angular';
+import { NavigationExtras } from '@angular/router';
 
 
 
@@ -72,7 +72,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     private photoService: PhotoService,
     private androidPermissions: AndroidPermissions,
     private http: HttpClient,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    public navCtrl: NavController
   ) {
     this.searchField = new FormControl("");
     if (this.platform.is('hybrid')) {
@@ -173,6 +174,7 @@ export class DashboardPage implements OnInit, OnDestroy {
           console.log(error);
       }
   );
+  return this.label
     }
   
 
@@ -333,8 +335,23 @@ export class DashboardPage implements OnInit, OnDestroy {
         
         console.log(image);
         if (image) {
+          
+
+          // send picture to results page
           const converted = await this.photoService.readAsBase64(image);
           this.imageTaken = converted;
+           
+          //this.sendPostRequest();
+          let navigationExtras: NavigationExtras = {
+            
+          queryParams: {
+                image : converted
+               
+            }
+        };
+       this.navCtrl.navigateForward(['results'], navigationExtras);
+          //this.router.navigate(["results",converted]);
+
           console.log("here")
         }
       } catch (error) {

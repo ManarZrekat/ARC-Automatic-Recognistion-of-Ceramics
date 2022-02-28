@@ -1,3 +1,4 @@
+
 <ion-header>
   <ion-toolbar>
     <ion-title>About</ion-title>
@@ -6,27 +7,65 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-content class="background">
+<!-- <ion-content padding class="content"> -->
 
-<ion-content>
-  <ion-tabs>
-    <div class="tabs-inner"></div>
   
-    <ion-tab-bar slot="bottom">
-    
-      <ion-tab-button type="submit" color="danger" expand="block" (click)="about()">
-        <ion-icon name="information-circle"></ion-icon>
-        <ion-label>About</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button type="submit" color="danger" expand="block" (click)="home()">
-        <ion-icon name="Home"></ion-icon>
-        <ion-label>Home</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
-        <ion-icon name="log-out-outline"></ion-icon>
-        <ion-label>Signout</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+  <h1>Welcome to ARC!</h1>
+
+ 
+    <h4>
+    ARC - Automatic recognition of cermaics.
+    <br><br>
+    The recognition model can identify four types of ceramics which are the following:
+    <br>
+    1- Juglets
+    <br>
+    2- Jugs
+    <br>
+    3- Jars
+    <br>
+    4- Bowls
+  </h4>
+  <br>
+ 
+<!-- <p class="parg"> </p> -->
+<h2><ion-icon name="megaphone-sharp"></ion-icon> Tips for taking a good picture to get the best results</h2>
+<br><h4>Place the pottery at the center of the frame, let the camera focus and snap!</h4>
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwsf6cF9iLIxkts7zbzZ9YWuJBWkzslgMoEA&usqp=CAU" height="200" width="200" />
+ <br>
+ <h4>Don't take a close picture, make sure the whole pottery is shown</h4> 
+ <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdHOWT_UHTbQNbBZ8LZ5YYTiG-yTtSFITXIw&usqp=CAU" height="200" width="200"  />
+
+
+
+
+ <br>
+  <h2>Future work</h2> 
+  <h4>The goal of this project was to identify both the type and the period of the whole pottery as well as shards but due to the lack of photos we were only able to do identification by type.</h4>
+  <h4>For future work we're implementing identification by period on shards and whole pottery</h4>
+
+
+
+
+
+
 </ion-content>
+
+<ion-tab-bar slot="bottom">
+  
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="about()">
+    <ion-icon name="information-circle"></ion-icon>
+    <ion-label>About</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="home()">
+    <ion-icon name="Home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
+    <ion-icon name="log-out-outline"></ion-icon>
+    <ion-label>Signout</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

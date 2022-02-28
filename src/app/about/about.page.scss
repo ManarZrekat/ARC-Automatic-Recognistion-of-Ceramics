@@ -1,0 +1,75 @@
+ion-content.background{
+    --background: url(../../assets/bg16.jpg) 0 0/100% 100% no-repeat;
+
+}
+h1{
+    font-style: initial;
+    font-weight: bold;
+}
+h4{
+ font-style:italic;
+ font-weight: bold;
+ color: rgb(49, 47, 47);
+ font-size:medium;
+}
+h2{
+font-family:'Times New Roman', Times, serif;
+color: rgb(87, 59, 26);
+font-weight: bold;
+}
+.background{
+ 
+    // margin-left: 30px;
+    position: relative;
+    padding: 10px;
+    // left: 10px;
+    // margin-bottom: 10px;
+    font-size: medium;
+    height: 100vh;
+    color: black;
+    width: 100vw;
+    // background-image: url();
+   
+
+    .list{
+        position: relative;
+        top: 30px;
+        width: 15vw;
+        width: 70vw;
+      
+        text-align: center;
+        height: 21vh;
+        ion-item{
+            height: 5vh;
+            text-align: center;
+            font-size: small;
+          
+        }
+    }
+
+    .imagesDiv{
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        // height: 30vh;
+        width: 20vw;
+        img{
+            width: 15vw;
+            height: 15vh;
+        }
+    }
+    .futureWork{
+        font-weight: bold;
+    }
+
+    // tabs-inner{
+    //     position: absolute;
+    //     bottom: 0%;
+    // }
+  
+}
+
+
+p{
+    width: 80vw;
+}

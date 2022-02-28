@@ -1,9 +1,58 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>results</ion-title>
+    <ion-title>ARC</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+
+
+<ion-content class="background">
+
+
+<br>
+<br>
+  <ion-grid *ngIf="img">
+    <ion-row style="text-align: center;">
+      <img [src]="img" height="300" width="300" alt="" style="margin: 0 auto; ">
+    </ion-row>
+  </ion-grid>
+
+<br>
+<br>
+
+<ion-text >
+  <h1>{{label}}</h1>
+</ion-text>
+
+
+  <ion-text >
+    <h4>{{disc}}</h4>
+  </ion-text>
+
 
 </ion-content>
+
+
+
+
+
+<ion-tab-bar slot="bottom">
+  
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="about()">
+    <ion-icon name="information-circle"></ion-icon>
+    <ion-label>About</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="home()">
+    <ion-icon name="Home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button type="submit" color="danger" expand="block" (click)="signOut()">
+    <ion-icon name="log-out-outline"></ion-icon>
+    <ion-label>Signout</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

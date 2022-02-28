@@ -6,16 +6,20 @@
 </ion-header>
 
 <ion-content id="search" class="background">
+  <br>
+  <br>
   <ion-grid>
 
     <ion-row>
       <ion-col text-center>
 
         <div class="topnav" >
+
+
           <!-- <a class="active" href="#home">Home</a> -->
     
           <!-- <ion-searchbar placeholder="Search Here" debounce="500" (ionInput)="search($event)" [(ngModel)]="searchKey" ></ion-searchbar> -->
-          <ion-searchbar id ="searchbar" placeholder="Search Here" debounce="500" (keyup)="searchbar($event)" [(ngModel)]="searchKey" ></ion-searchbar>
+          <ion-searchbar id ="searchbar" placeholder="Search Here" debounce="500" (click)="searchbar($event)" [(ngModel)]="searchKey" ></ion-searchbar>
 
         </div>
 
@@ -26,49 +30,11 @@
 
   
 
-
-
-<!-- 
-<ion-content padding>
--->
-  <!-- <ion-card>
-    <ion-card-content>
-
-    <button ion-button icon-right (click)="onTakePicture()">
-      Take Picture <ion-icon name="camera"></ion-icon>
-    </button>
-
-    <img *ngIf="image$ | async as image"
-      [src]="domSanitizer.bypassSecurityTrustUrl(image)" />
-
-    </ion-card-content>
-  </ion-card> -->
-
-  <!-- <display-error [error]="error$"></display-error> -->
- 
-<!-- <ion-grid>
-  <ion-row class="ion-align-self-center">
-    <ion-col size="6">
-      <ion-button (click)="takePhoto(1)">Show Camera</ion-button>
-    </ion-col>
-    <ion-col size="6">
-      <ion-button (click)="takePhoto(0)">Show Album</ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-<div *ngIf="base64Image">
-  <img [src]="base64Image">
-  <ion-button (click)="upload()">Upload to Firebase!</ion-button>
-</div> -->
-
-
-
-
-  <ion-grid *ngIf="imageTaken">
+  <!-- <ion-grid *ngIf="imageTaken">
     <ion-row style="text-align: center;">
       <img [src]="imageTaken" alt="" style="margin: 0 auto;">
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
   <ion-grid>
     <ion-row class="ion-align-self-center">
       <ion-col size="6"  id = "camera" style="text-align: right;">
@@ -91,7 +57,7 @@
   </div> -->
 
 
-  <ion-button type="submit" (click)="sendPostRequest()">Predict</ion-button>
+  <!-- <ion-button type="submit" (click)="sendPostRequest()">Predict</ion-button> -->
 </ion-content>
 
 
