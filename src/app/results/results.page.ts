@@ -78,7 +78,7 @@ export class ResultsPage implements OnInit {
     let formData: FormData = new FormData();
   formData.append('file', this.photoService.imgfile);
   
-  this.http.post("http://b901-2001-4df7-3-8d4b-c864-d05c-4f3b-3a1a.ngrok.io/predict", formData, {responseType: 'text'}).subscribe(
+  this.http.post("https://arc-server1.herokuapp.com/predict", formData, {responseType: 'text'}).subscribe(
       data => {
         this.label = data;
         this.disc = this.dict[data];
