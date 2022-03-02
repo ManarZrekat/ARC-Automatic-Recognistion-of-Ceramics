@@ -2,33 +2,24 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
-import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { CameraPage } from "../camera/camera.page";
+import { Photo } from '@capacitor/camera';
 import {
-  AngularFirestore,
-  AngularFirestoreCollection,
+  AngularFirestore
 } from "@angular/fire/compat/firestore";
-// import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { first, startWith } from "rxjs/operators";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { AlertController, Platform } from "@ionic/angular";
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import { map, finalize } from "rxjs/operators";
 import { Observable, Subscription } from "rxjs";
 import { UserPhoto,PhotoService } from '../services/photo.service';
 import { ToastController } from "@ionic/angular";
 import { FormControl } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { ActionSheetController } from '@ionic/angular';
-
 import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
-
-
-
-
 import { HttpClient} from '@angular/common/http';
-import { readFileSync } from "fs";
+
 
 interface pottery {
   name?: string;
@@ -67,11 +58,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     private ionicAuthService: AuthService,
     private firestore: AngularFirestore,
     private alertCtrl: AlertController,
-    private storage: AngularFireStorage,
     private platform: Platform,
     private photoService: PhotoService,
     private androidPermissions: AndroidPermissions,
-    private http: HttpClient,
     public actionSheetController: ActionSheetController,
     public navCtrl: NavController
   ) {
@@ -87,7 +76,7 @@ export class DashboardPage implements OnInit, OnDestroy {
           )
       );
           }
-          // if (this.platform.is('hybrid')) {      
+              
     this.androidPermissions
       .requestPermissions([
         this.androidPermissions.PERMISSION.CAMERA
@@ -96,7 +85,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       .catch((err) =>
         console.log("error requesting permission for camera", err)
       );
-    // }
+  
   }
 
   searchbar(evt){
@@ -122,61 +111,13 @@ export class DashboardPage implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
     });
-    // search logic
-    // this.searchSub = this.searchField.valueChanges
-    //   .pipe(startWith(this.searchField.value))
-    //   .subscribe((res) => {
-    //     this.getSearchResults(res);
-    //   });
+ 
 
     this.potteryList = await this.initializeItems();
 
     await this.photoService.loadSaved();
   }
-  // async sendPostRequest() {
-  //   let  url = 'http://192.168.1.20:8989/predict';
-  //   const date = new Date().valueOf();
-  
-  //   // Replace extension according to your media type
-  //   const imageName = date+ '.png';
-  //   // call method that creates a blob from dataUri
-  //   // const = photo
-  //   const base64 = this.photoService.readAsBase64(await this.photoService.imgfile)
-  //   console.log("a", await this.photoService.imgfile);
-
-  //   console.log("b", await base64);
-
-  //   const imageBlob = this.dataURItoBlob(base64);
-    
-  //   const imageFile = new File([imageBlob], imageName, { type: 'image/png' })
-
-  //   let  postData = new FormData();
-  //   postData.append('file', imageFile);
-  
-  //   let data:Observable<any> = this.httpClient.post(url,postData);
-  //   data.subscribe((result) => {
-  //     console.log(result);
-  //   });
-
-  // }
-
-
-  async sendPostRequest() {
-    let formData: FormData = new FormData();
-  formData.append('file', this.photoService.imgfile);
-  
-  this.http.post("http://localhost:8989/predict", formData, {responseType: 'text'}).subscribe(
-      data => {
-        this.label = data;
-          console.log(data); 
-      },
-      error => {
-          console.log(error);
-      }
-  );
-  return this.label
-    }
-  
+ 
 
 
   dataURItoBlob(dataURI) {
@@ -238,7 +179,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     const potteryList = merge.concat(merge2);
 
 
-    //this.potteryListBackup = potteryList;
+    
     return potteryList;
   }
   search(event) {
@@ -251,18 +192,12 @@ export class DashboardPage implements OnInit, OnDestroy {
       this.potteryListBackup = this.potteryList.filter((currentPottery) => {
         if (currentPottery.tags && this.searchKey) {
           return (currentPottery.tags.includes(this.searchKey) );
-         // return (currentPottery.name.toLowerCase().indexOf(this.searchKey.toLowerCase()) > -1 || currentPottery.type.toLowerCase().indexOf(this.searchKey.toLowerCase()) > -1);
-          
+  
         }
-        // else if (!currentPottery.tags.includes(this.searchKey)){
-        //   console.log("no results were found");
-        // }
+
       });
       if(this.potteryListBackup.length == 0){
-        //const element: HTMLElement = document.getElementsById('img') as HTMLElement
-        //const el = document.getElementsByClassName('img');
-        //element.innerHTML += "no results were found"
-        console.log("no results were found");
+          console.log("no results were found");
 
       }
 
@@ -277,20 +212,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     mediaType: this.camera.MediaType.PICTURE,
   };
 
-  // takeSnap() {
-  //   this.camera.getPicture(this.options).then(
-  //     (imageData) => {
-  //       // this.camera.DestinationType.FILE_URI gives file URI saved in local
-  //       // this.camera.DestinationType.DATA_URL gives base64 URI
-  //       let base64Image = "data:image/jpeg;base64," + imageData;
-  //       // this.capturedSnapURL = base64Image;
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //       // Handle error
-  //     }
-  //   );
-  // }
+ 
   async uploadImage() {
     try {
       const image = await this.photoService.getFromGallery();
@@ -360,10 +282,6 @@ export class DashboardPage implements OnInit, OnDestroy {
         this.presentToast("user cancelled the operation", "warning");
       }
     }
-  // }
-  // catch (e) {
-  //   console.log('no photo');
-  // }
 
   }
   addPhotoToGallery() {
@@ -371,32 +289,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
 
-  // upload(): void {
-  //   var currentDate = Date.now();
-  //   const file: any = this.base64ToImage(this.base64Image);
-  //   const filePath = `Images/${currentDate}`;
-  //   const fileRef = this.storage.ref(filePath);
-
-  //   const task = this.storage.upload(`Images/${currentDate}`, file);
-  //   task
-  //     .snapshotChanges()
-  //     .pipe(
-  //       finalize(() => {
-  //         this.downloadURL = fileRef.getDownloadURL();
-  //         this.downloadURL.subscribe((downloadURL) => {
-  //           if (downloadURL) {
-  //             this.showSuccesfulUploadAlert();
-  //           }
-  //           console.log(downloadURL);
-  //         });
-  //       })
-  //     )
-  //     .subscribe((url) => {
-  //       if (url) {
-  //         console.log(url);
-  //       }
-  //     });
-  // }
+ 
 
   public async showActionSheet(photo: UserPhoto, position: number) {
     const actionSheet = await this.actionSheetController.create({
@@ -432,18 +325,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  // base64ToImage(dataURI) {
-  //   const fileDate = dataURI.split(",");
-  //   // const mime = fileDate[0].match(/:(.*?);/)[1];
-  //   const byteString = atob(fileDate[1]);
-  //   const arrayBuffer = new ArrayBuffer(byteString.length);
-  //   const int8Array = new Uint8Array(arrayBuffer);
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     int8Array[i] = byteString.charCodeAt(i);
-  //   }
-  //   const blob = new Blob([arrayBuffer], { type: "image/png" });
-  //   return blob;
-  // }
+
 
   //bottom tab bar functions
   signOut() {

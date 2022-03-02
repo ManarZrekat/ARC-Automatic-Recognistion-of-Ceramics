@@ -10,29 +10,34 @@
 
 
 <ion-content class="background">
-
+<div class ="results">
 
 <br>
 <br>
   <ion-grid *ngIf="img">
     <ion-row style="text-align: center;">
-      <img [src]="img" height="300" width="300" alt="" style="margin: 0 auto; ">
+      <div class="" *ngIf="!hide">
+        <ion-spinner name="lines"></ion-spinner>
+      </div>
+      
+      <ion-text >
+        <h1>{{label}}</h1>
+      </ion-text>
+      <img [src]="img"  height="200" width="200" alt="" style="margin: 0 auto; ">
     </ion-row>
   </ion-grid>
 
 <br>
-<br>
 
-<ion-text >
-  <h1>{{label}}</h1>
-</ion-text>
+
+
 
 
   <ion-text >
     <h4>{{disc}}</h4>
   </ion-text>
 
-
+</div>
 </ion-content>
 
 

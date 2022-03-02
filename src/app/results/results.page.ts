@@ -2,25 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
-import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { CameraPage } from "../camera/camera.page";
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from "@angular/fire/compat/firestore";
-// import {  CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-
 import { ToastController } from "@ionic/angular";
-import { FormControl } from "@angular/forms";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { ActionSheetController } from '@ionic/angular';
 import { HttpClient} from '@angular/common/http';
-import { DashboardPage } from '../dashboard/dashboard.page';
 import { UserPhoto,PhotoService } from '../services/photo.service';
-
-
 import { ActivatedRoute } from '@angular/router';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.page.html',
@@ -37,6 +24,7 @@ export class ResultsPage implements OnInit {
   }
   disc : string;
   newdisc : string="";
+  hide:Boolean;
  
 
   constructor(
@@ -55,6 +43,7 @@ export class ResultsPage implements OnInit {
  
    
  ngOnInit() {
+   this.hide = false;
   this.route.queryParams.subscribe(params => {
     this.img = params["image"];
   
@@ -64,16 +53,9 @@ export class ResultsPage implements OnInit {
 
   this.sendPostRequest();
 
- 
-  console.log();
-  console.log(this.disc);
-
   }
 
-  // adddisc(){
-  //   this.newdisc = "<ion-content>"
-  // }
-
+ //Post request sent to the heroku server
   async sendPostRequest() {
     let formData: FormData = new FormData();
   formData.append('file', this.photoService.imgfile);
@@ -82,8 +64,8 @@ export class ResultsPage implements OnInit {
       data => {
         this.label = data;
         this.disc = this.dict[data];
-        console.log("dddd")
-          console.log(data); 
+          this.hide = true;
+          
       },
       error => {
           console.log(error);
