@@ -19,8 +19,11 @@
  
  # *Getting Started* 
  ●	Run npm install from the project root. 
+ 
  ●	To install the Camera plugin use "npm install -g cordova ionic" 
+ 
  ●	Deploy the firebase to the application by following the instructions in this link: https://alligator.io/angular/deploying-angular-app-to-firebase/ 
+ 
  ●	Use "ionic server" to open the application in development mode.
  
  # *App preview* 
